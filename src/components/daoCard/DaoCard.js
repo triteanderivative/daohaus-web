@@ -19,16 +19,21 @@ const DaoCard = props => {
     return parseFloat(amt).toFixed(2);
   };
 
-  const randoColor = () => {
+  const getColor = hex => {
     const colors = [
       //'#513E97',
       '#0E99C4',
       '#4EBD9E',
       '#EA8923',
-      '#F05F61'
-    ]
-    return colors[Math.floor(Math.random()*colors.length)];
-  }
+      '#F05F61',
+    ];
+    if (hex) {
+      // covert substring of hex to number in range
+      return colors[Math.floor((hex.substring(0, 3) * colors.length) / 0xf)];
+    } else {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error - use mainnet :(</p>;
@@ -36,7 +41,10 @@ const DaoCard = props => {
   return (
     <>
       {dao.id ? (
-        <div className="DaoCard" style={{backgroundColor: randoColor()}}>
+        <div
+          className="DaoCard"
+          style={{ backgroundColor: getColor(dao.moloch) }}
+        >
           <h4 className="DaoName">{dao.apiData.name || dao.title}</h4>
           <p>{dao.apiData.description}</p>
           <div className="Row">
